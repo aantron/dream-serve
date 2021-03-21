@@ -1,0 +1,9 @@
+opam-version: "2.0"
+
+depends: [
+  "dream"
+  "dune" {>= "2.0.0"}
+  "lambdasoup"
+  "luv"
+  "lwt" {>= "5.4.0"}
+]

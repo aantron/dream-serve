@@ -1,0 +1,3 @@
+(executable
+ (public_name serve)
+ (libraries dream lambdasoup lwt.unix serve_lwt_luv))
