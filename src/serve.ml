@@ -1,12 +1,14 @@
 let path =
   ref "."
 
-(* "Parse" command-line arguments. *)
+let port =
+  ref 8080
+
+(* Parse command-line arguments. *)
 let () =
-  match Sys.argv.(1) with
-  | exception _ -> ()
-  | "" -> ()
-  | string -> path := string
+  Arg.parse (Arg.align [
+    "-p", Arg.Set_int port, " Port number";
+  ]) ((:=) path) "serve [OPTIONS] [PATH]"
 
 (* Switch to libuv for file watcher support. *)
 let () =
@@ -106,7 +108,7 @@ let inject_script next_handler request =
 
 (* Run the web server. *)
 let () =
-  Dream.run ~debug:true
+  Dream.run ~debug:true ~port:!port
   @@ Dream.logger
   @@ inject_script
   @@ Dream.router [
