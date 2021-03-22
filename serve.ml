@@ -106,10 +106,28 @@ let inject_script next_handler request =
   | _ ->
     Lwt.return response
 
+(* Rewrites requests for directories to requests for index.html. *)
+let index_html next_handler request =
+  let rec is_directory path =
+    match path with
+    | [""] -> true
+    | _::suffix -> is_directory suffix
+    | _ -> false
+  in
+
+  let path = Dream__pure.Inmost.internal_path (Obj.magic request) in
+
+  if is_directory path then
+    let location = Dream.path request ^ "index.html" in
+    Dream.respond ~status:`See_Other ~headers:["Location", location] ""
+  else
+    next_handler request
+
 (* Run the web server. *)
 let () =
   Dream.run ~debug:true ~port:!port
   @@ Dream.logger
+  @@ index_html
   @@ inject_script
   @@ Dream.router [
 
