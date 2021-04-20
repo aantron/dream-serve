@@ -115,10 +115,10 @@ let index_html next_handler request =
     | _ -> false
   in
 
-  let path = Dream__pure.Inmost.internal_path (Obj.magic request) in
+  let path = Dream.path request in
 
   if is_directory path then
-    let location = Dream.path request ^ "index.html" in
+    let location = String.concat "/" (path @ ["index.html"]) in
     Dream.respond ~status:`See_Other ~headers:["Location", location] ""
   else
     next_handler request
@@ -141,7 +141,7 @@ let () =
         Lwt.bind
           (Dream.receive socket) (fun _ ->
           remove key;
-          Dream.close socket)));
+          Dream.close_websocket socket)));
 
     (* All other requests are served from the file system. *)
     Dream.get "*" (Dream.static ".");
