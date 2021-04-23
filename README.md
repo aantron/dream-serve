@@ -11,9 +11,10 @@ your browser when the site changes.
 
 <br>
 
-It's good for developing docs, streamlining [coverage reports][bisect], and so
-forth. It works by injecting a script into HTML, which opens a WebSocket back to
-the server. The server uses the WebSocket to tell the browser when to reload.
+It's good for [developing docs][odoc], streamlining [coverage reports][bisect],
+and so forth. It works by injecting a script into HTML, which opens a WebSocket
+back to the server. The server uses the WebSocket to tell the browser when to
+reload.
 
 <br>
 
@@ -60,6 +61,7 @@ easily run Dream over libuv.
 [lwt_luv]: https://github.com/ocsigen/lwt/pull/811
 [bisect]: https://github.com/aantron/bisect_ppx#readme
 [libuv]: https://github.com/libuv/libuv
+[odoc]: https://github.com/ocaml/odoc
 
 <br>
 
