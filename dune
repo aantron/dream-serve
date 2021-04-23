@@ -1,4 +1,5 @@
 (executable
  (public_name dream-serve)
  (name dream_serve)
- (libraries dream lambdasoup lwt.unix serve_lwt_luv))
+ (libraries dream lambdasoup lwt.unix serve_lwt_luv)
+ (preprocess (pps lwt_ppx)))
