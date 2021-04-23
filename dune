@@ -1,3 +1,4 @@
 (executable
- (public_name serve)
+ (public_name dream-serve)
+ (name dream_serve)
  (libraries dream lambdasoup lwt.unix serve_lwt_luv))

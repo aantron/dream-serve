@@ -1,3 +1,3 @@
 .PHONY : run
 run :
-	dune exec -- serve .
+	dune exec -- dream-serve .
