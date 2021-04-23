@@ -3,7 +3,11 @@
 **dream-serve** is a [very simple][source] server for static sites. It reloads
 your browser when the site changes.
 
-TODO: GIF with example commands and result.
+<br>
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/aantron/dream-serve/master/reload.gif"></img>
+</p>
 
 <br>
 
