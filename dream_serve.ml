@@ -144,7 +144,7 @@ let () =
           Dream.close_websocket socket)));
 
     (* All other requests are served from the file system. *)
-    Dream.get "*" (Dream.static ".");
+    Dream.get "**" (Dream.static ".");
 
   ]
   @@ fun _ -> Dream.respond ~status:`Not_Found ""
