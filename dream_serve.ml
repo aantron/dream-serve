@@ -1,3 +1,10 @@
+(* This file is part of dream-serve, released under the MIT license. See
+   LICENSE.md for details, or visit https://github.com/aantron/dream-serve.
+
+   Copyright 2021 Anton Bachin *)
+
+
+
 (* Parse command-line arguments. *)
 
 let path =
