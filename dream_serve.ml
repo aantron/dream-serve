@@ -84,7 +84,7 @@ let () =
     websockets |> Hashtbl.iter (fun key websocket ->
       Lwt.async (fun () ->
         Lwt.catch
-          (fun () -> Dream.send "refresh" websocket)
+          (fun () -> Dream.send websocket "refresh")
           (fun _ -> remove key; Lwt.return_unit))))
 
 
@@ -104,7 +104,7 @@ let inject_script next_handler request =
   let%lwt response = next_handler request in
 
   match Dream.header "Content-Type" response with
-  | Some "text/html" ->
+  | Some ("text/html" | "text/html; charset=utf-8") ->
     let%lwt body = Dream.body response in
     let soup = Soup.parse body in
 
@@ -136,7 +136,7 @@ let index_html next_handler request =
   let path = Dream.path request in
 
   if is_directory path then
-    Dream.redirect (String.concat "/" (path @ ["index.html"]))
+    Dream.redirect request (String.concat "/" (path @ ["index.html"]))
   else
     next_handler request
 
