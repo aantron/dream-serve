@@ -106,7 +106,13 @@ let inject_script next_handler request =
   match Dream.header "Content-Type" response with
   | Some ("text/html" | "text/html; charset=utf-8") ->
     let%lwt body = Dream.body response in
-    let soup = Soup.parse body in
+
+    let soup =
+      Markup.string body
+      |> Markup.parse_html ~context:`Document
+      |> Markup.signals
+      |> Soup.from_signals
+    in
 
     let open Soup.Infix in
 
