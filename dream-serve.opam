@@ -8,3 +8,7 @@ depends: [
   "lwt" {>= "5.4.0"}
   "lwt_ppx"
 ]
+
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
