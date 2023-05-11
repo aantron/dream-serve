@@ -152,7 +152,11 @@ let index_html next_handler request =
 (* Run the web server. *)
 
 let () =
-  Dream.run ~port:!port
+  Dream.log "Running at http://localhost:%i" !port;
+  Dream.log "Type Ctrl+C to stop";
+
+  Lwt_main.run
+  @@ Dream.serve ~port:!port
   @@ Dream.logger
   @@ index_html
   @@ inject_script
