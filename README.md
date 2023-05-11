@@ -20,22 +20,6 @@ reload.
 
 ## Usage
 
-Until dream-serve is released to opam and npm:
-
-```
-git clone https://github.com/aantron/dream-serve.git
-cd dream-serve
-_build/install/default/bin/dream-serve /my/site
-```
-
-After npm release:
-
-```
-npx dream-serve ./my/site
-```
-
-After opam release:
-
 ```
 opam install dream-serve
 dream-serve ./my/site
@@ -62,11 +46,3 @@ easily run Dream over libuv.
 [bisect]: https://github.com/aantron/bisect_ppx#readme
 [libuv]: https://github.com/libuv/libuv
 [odoc]: https://github.com/ocaml/odoc
-
-<br>
-
-## Roadmap
-
-- [ ] Factor out the client-handling and HTML-rewriting logic into a library
-  that can be used with dynamic apps, so that they trigger a reload when coming
-  back up.
