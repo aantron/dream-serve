@@ -25,6 +25,12 @@ opam install dream-serve
 dream-serve ./my/site
 ```
 
+To choose a port number,
+
+```
+dream-serve ./my/site -p 9090
+```
+
 <br>
 
 ## Based on
