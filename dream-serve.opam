@@ -1,10 +1,12 @@
 opam-version: "2.0"
 
-synopsis: "Static site server with live reload"
+synopsis: "Static HTML website server with live reload"
 
 description: """
-dream-serve injects a small script into .html files, which reloads Web pages
-when they are updated in the file system.
+dream-serve serves a static HTML site. It injects a small script which reloads
+Web pages when they are updated in the file system. This makes it great for
+static site development, including odoc documentation pages, and for viewing
+Bisect_ppx coverage reports across multiple test runs.
 """
 
 license: "MIT"
