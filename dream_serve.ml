@@ -103,7 +103,7 @@ _monitoring_socket.onmessage = function (e) {
 let inject_script next_handler request =
   let%lwt response = next_handler request in
 
-  match Dream.header "Content-Type" response with
+  match Dream.header response "Content-Type" with
   | Some ("text/html" | "text/html; charset=utf-8") ->
     let%lwt body = Dream.body response in
 
@@ -121,7 +121,8 @@ let inject_script next_handler request =
     | Some head ->
       Soup.create_element "script" ~inner_text:script
       |> Soup.append_child head;
-      Lwt.return (Dream.with_body (Soup.to_string soup) response)
+      Dream.set_body response (Soup.to_string soup);
+      Lwt.return response
     end
 
   | _ ->
@@ -151,7 +152,7 @@ let index_html next_handler request =
 (* Run the web server. *)
 
 let () =
-  Dream.run ~debug:true ~port:!port
+  Dream.run ~port:!port
   @@ Dream.logger
   @@ index_html
   @@ inject_script
@@ -173,4 +174,3 @@ let () =
     Dream.get "**" (Dream.static !path);
 
   ]
-  @@ Dream.not_found
