@@ -13,9 +13,13 @@ let path =
 let port =
   ref 8080
 
+let md =
+  ref true
+
 let () =
   Arg.parse (Arg.align [
     "-p", Arg.Set_int port, " Port number";
+    "--no-md", Arg.Clear md, " Don't convert Markdown files to HTML";
   ]) ((:=) path) "serve [OPTIONS] [PATH]"
 
 
@@ -149,6 +153,62 @@ let index_html next_handler request =
 
 
 
+(* Optionally rewrite requests to foo.html to foo.md. *)
+
+let rec last = function
+  | [] -> None
+  | [x] -> Some x
+  | _::more -> last more
+
+let rec replace_last x = function
+  | [] -> assert false
+  | [_] -> [x]
+  | x'::more -> x'::(replace_last x more)
+
+(* Based on Quick Start in the Cmarkit docs
+   (https://erratique.ch/software/cmarkit/doc/). *)
+let cmark_to_html md =
+  let doc = Cmarkit.Doc.of_string md in
+  Cmarkit_html.of_doc ~safe:false doc
+
+let try_markdown next_handler request =
+  let%lwt response = next_handler request in
+
+  if Dream.status response <> `Not_Found then
+    Lwt.return response
+
+  else begin
+    let path = Dream.path request in
+    let (ends_with_html, file) =
+      match last path with
+      | Some file when Filename.extension file = ".html" -> true, file
+      | _ -> false, ""
+    in
+    if not ends_with_html then
+      Lwt.return response
+
+    else begin
+      let original_response = response in
+
+      let path = replace_last ((Filename.remove_extension file) ^ ".md") path in
+      let request = Dream.with_path path request in
+
+      let%lwt response = next_handler request in
+
+      if Dream.status response <> `OK then
+        Lwt.return original_response
+
+      else begin
+        Dream.set_header response "Content-Type" Dream.text_html;
+        let%lwt body = Dream.body response in
+        Dream.set_body response (cmark_to_html body);
+        Lwt.return response
+      end
+    end
+  end
+
+
+
 (* Run the web server. *)
 
 let () =
@@ -160,6 +220,7 @@ let () =
   @@ Dream.logger
   @@ index_html
   @@ inject_script
+  @@ (if !md then try_markdown else Dream.no_middleware)
   @@ Dream.router [
 
     (* Upon a request to /_monitoring_websocket, add the WebSocket to the

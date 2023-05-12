@@ -19,6 +19,7 @@ author: "Anton Bachin <antonbachin@yahoo.com>"
 maintainer: "Anton Bachin <antonbachin@yahoo.com>"
 
 depends: [
+  "cmarkit"
   "dream" {>= "1.0.0~alpha3"}
   "dune" {>= "2.0.0"}
   "lambdasoup" {>= "0.6.1"}
