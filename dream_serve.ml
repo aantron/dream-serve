@@ -5,6 +5,16 @@
 
 
 
+module Dream =
+struct
+  include Dream
+
+  let path = path [@ocaml.warning "-3"]
+  let with_path = with_path [@ocaml.warning "-3"]
+end
+
+
+
 (* Parse command-line arguments. *)
 
 let path =
