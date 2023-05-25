@@ -219,6 +219,20 @@ let try_markdown next_handler request =
 
 
 
+(* Suppress caching, as this server runs only locally. *)
+
+let suppress_caching next_handler request =
+  let%lwt response = next_handler request in
+  begin match Dream.header response "Content-Type" with
+  | Some "text/html; charset=utf-8" ->
+    Dream.set_header response "Cache-Control" "no-store";
+  | _ ->
+    ()
+  end;
+  Lwt.return response
+
+
+
 (* Run the web server. *)
 
 let () =
@@ -228,6 +242,7 @@ let () =
   Lwt_main.run
   @@ Dream.serve ~port:!port
   @@ Dream.logger
+  @@ suppress_caching
   @@ index_html
   @@ inject_script
   @@ (if !md then try_markdown else Dream.no_middleware)
